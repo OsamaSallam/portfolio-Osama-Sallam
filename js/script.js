@@ -1,121 +1,325 @@
-/* =================================== typing animation  ================================= */
-var typed = new Typed(".typing",{
-    strings : ["Web Desiger","Web Developer", "Graphic Desiger", "Freelancer"],
+/* =========================================================
+   Typing Animation
+   ========================================================= */
+
+var typed = new Typed(".typing", {
+
+    strings: [
+        "Web Desiger",
+        "Web Developer",
+        "Graphic Desiger",
+        "Freelancer"
+    ],
+
     typeSpeed: 100,
-    BaskSpeed:60,
-    loop:true
-})
-/* =================================== Aside  ================================= */
-const nav =document.querySelector(".nav"),
-    navList = nav.querySelectorAll("li"),
-    totalNavList =navList.length,
 
-    
-    allSection = document.querySelectorAll(".section"),
-    totalSection = allSection.length;
-    for(let i=0; i<totalNavList; i++)
-    {
-        const a= navList[i].querySelector("a")
-        a.addEventListener("click" , function()
-        {
+    // Correct option name
+    backSpeed: 60,
+
+    loop: true
+});
+
+
+/* =========================================================
+   Aside / Navigation
+   ========================================================= */
+
+const nav = document.querySelector(".nav");
+
+const navList = nav.querySelectorAll("li");
+
+const totalNavList = navList.length;
+
+const allSection =
+    document.querySelectorAll(".section");
+
+const totalSection = allSection.length;
+
+
+/* =========================================================
+   Navigation Links
+   ========================================================= */
+
+for (let i = 0; i < totalNavList; i++) {
+
+    const a =
+        navList[i].querySelector("a");
+
+
+    a.addEventListener(
+        "click",
+        function () {
+
             removeBackSection();
-              for(let j=0; j<totalNavList; j++)
-            {
-                if(navList[j].querySelector("a").classList.contains("active"))
-                {
+
+
+            for (let j = 0; j < totalNavList; j++) {
+
+                const currentLink =
+                    navList[j].querySelector("a");
+
+
+                if (
+                    currentLink.classList.contains("active")
+                ) {
+
                     addBackSection(j);
-                   // allSection[j].classList.add("back-section");
+
                 }
-                navList[j].querySelector("a").classList.remove("active");
+
+
+                currentLink.classList.remove("active");
+
             }
-            this.classList.add("active")
+
+
+            this.classList.add("active");
+
+
             showSection(this);
-            if(window.innerWidth <1200)
-            {
+
+
+            if (window.innerWidth < 1200) {
+
                 asideSectionTogglerBtn();
+
             }
-        })
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   Remove Back Section
+   ========================================================= */
+
+function removeBackSection() {
+
+    for (let i = 0; i < totalSection; i++) {
+
+        allSection[i]
+            .classList
+            .remove("back-section");
 
     }
-    function removeBackSection()
-    {
-        for(let i=0; i<totalSection; i++)
-        {
-            allSection[i].classList.remove(".back-section");
+
+}
+
+
+/* =========================================================
+   Add Back Section
+   ========================================================= */
+
+function addBackSection(num) {
+
+    if (allSection[num]) {
+
+        allSection[num]
+            .classList
+            .add("back-section");
+
+    }
+
+}
+
+
+/* =========================================================
+   Show Selected Section
+   ========================================================= */
+
+function showSection(element) {
+
+    for (let i = 0; i < totalSection; i++) {
+
+        allSection[i]
+            .classList
+            .remove("active");
+
+    }
+
+
+    const href =
+        element.getAttribute("href");
+
+
+    if (!href) {
+        return;
+    }
+
+
+    const target =
+        href.split("#")[1];
+
+
+    const targetSection =
+        document.querySelector("#" + target);
+
+
+    if (targetSection) {
+
+        targetSection
+            .classList
+            .add("active");
+
+    }
+
+}
+
+
+/* =========================================================
+   Update Navigation
+   ========================================================= */
+
+function updateNav(element) {
+
+    const href =
+        element.getAttribute("href");
+
+
+    if (!href) {
+        return;
+    }
+
+
+    const target =
+        href.split("#")[1];
+
+
+    for (let i = 0; i < totalNavList; i++) {
+
+        const link =
+            navList[i].querySelector("a");
+
+
+        link.classList.remove("active");
+
+
+        const linkHref =
+            link.getAttribute("href");
+
+
+        if (!linkHref) {
+            continue;
         }
-    }
-    function addBackSection(num)
-    {
-        allSection[num].classList.add("back-section");
-    }
-    function showSection(element)
-    {
-        for(let i=0; i<totalSection; i++)
-        {
-            allSection[i].classList.remove("active");
+
+
+        const linkTarget =
+            linkHref.split("#")[1];
+
+
+        if (target === linkTarget) {
+
+            link.classList.add("active");
+
         }
-       const target = element.getAttribute("href").split("#")[1];
-       document.querySelector("#" + target).classList.add("active")
+
     }
-    function updateNav(element)
-    {
-        for(let i=0; i<totalNavList ; i++)
-        {
-            navList[i].querySelector("a").classList.remove("active");
-            const target = element.getAttribute("href").split("#")[1];
-            if(target === navList[i].querySelector("a").getAttribute("href").split("#")[i])
-            {
-                navList[i].querySelector("a").classList.add("active");
+
+}
+
+
+/* =========================================================
+   Contact Me / Hire Me Button
+   ========================================================= */
+
+const hireMe =
+    document.querySelector(".hire-me");
+
+
+if (hireMe) {
+
+    hireMe.addEventListener(
+        "click",
+        function () {
+
+            const sectionIndex =
+                this.getAttribute(
+                    "data-section-index"
+                );
+
+
+            showSection(this);
+
+
+            updateNav(this);
+
+
+            removeBackSection();
+
+
+            if (sectionIndex !== null) {
+
+                addBackSection(
+                    Number(sectionIndex)
+                );
+
             }
+
         }
-    }
-    document.querySelector(".hire-me").addEventListener("click",function()
-    {
-        const sectionIndex = this.getAttribute("data-section-index");
-       // console.log(sectionIndex);
-        showSection(this);
-        updateNav(this);
-        removeBackSection();
-        addBackSection(sectionIndex);
-    })
-    const navTogglerBtn = document.querySelector(".nav-toggler"),
-    aside = document.querySelector(".aside");
-    navTogglerBtn.addEventListener( "click", () =>
-    {
-        asideSectionTogglerBtn();
-    })
-    function asideSectionTogglerBtn()
-    {
+    );
+
+}
+
+
+/* =========================================================
+   Mobile Navigation
+   ========================================================= */
+
+const navTogglerBtn =
+    document.querySelector(".nav-toggler");
+
+const aside =
+    document.querySelector(".aside");
+
+
+if (navTogglerBtn && aside) {
+
+    navTogglerBtn.addEventListener(
+        "click",
+        () => {
+
+            asideSectionTogglerBtn();
+
+        }
+    );
+
+
+    function asideSectionTogglerBtn() {
+
         aside.classList.toggle("open");
+
         navTogglerBtn.classList.toggle("open");
-        for(let i=0; i<totalSection; i++)
-        {
-            allSection[i].classList.toggle("open");
+
+
+        for (let i = 0; i < totalSection; i++) {
+
+            allSection[i]
+                .classList
+                .toggle("open");
+
         }
+
     }
 
+}
 
-    //email.js
-        function sendMail() {
-        var params = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        seubject:document.getElementById|("seubject").value,
-        message: document.getElementById("message").value,
-        };
-      
-        const serviceID = "service_3vtz3ss";
-        const templateID = "template_awje3wb";
-      
-          emailjs.send(serviceID, templateID, params)
-          .then(res=>{
-              document.getElementById("name").value = "";
-              document.getElementById("email").value = "";
-              document.getElementById("seubject").value = "";
-              document.getElementById("message").value = "";
-              console.log(res);
-              alert("Your message sent successfully!!")
-      
-          })
-          .catch(err=>console.log(err));
-      }
+
+/* =========================================================
+   Contact Form
+   =========================================================
+
+   IMPORTANT:
+
+   The contact form is now handled directly by Web3Forms.
+
+   There is intentionally NO emailjs.send()
+   and NO sendMail() function here.
+
+   The HTML form sends directly to:
+
+   https://api.web3forms.com/submit
+
+   This keeps the email sending simple.
+   ========================================================= */
